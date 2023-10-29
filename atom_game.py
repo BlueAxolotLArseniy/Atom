@@ -4,7 +4,6 @@ from ursina.shaders import lit_with_shadows_shader
 import sys
 app = Ursina()
 
-# ground = Entity(model='plane', texture='grass', scale=(10, 30), position=(0, 0, -20))
 class Voxel(Entity):
     def __init__(self, position=(0,0,0), scale=(0, 0, 0)):
         super().__init__(parent=scene,
@@ -14,12 +13,12 @@ class Voxel(Entity):
             texture='floor_V.png',
             color=color.color(0, 0, random.uniform(.9, 1.0)),
             scale=scale,
-            collider='box',
-            texture_scale=(300, 300), shader=lit_with_shadows_shader
+            collider='box', shader=lit_with_shadows_shader
         )
 
-voxel = Voxel(position=(37.5,0,0), scale=(75, 1, 150))
-# voxel2 = Voxel(position=())
+for x in range(-100, 100, 5):
+    for z in range(-100, 0, 5):
+        voxel = Voxel(position=(x, 0, z), scale=(5, 1, 5))
 
 player = FirstPersonController(y=20, height=5)
 player.jump_up_duration = 1.9
@@ -28,20 +27,19 @@ player.mouse_sensitivity = (100, 100)
 player.speed = 17
 player.height = 5
 player.y = 40
+player.x = 50
 player.jump_height = 6
-# mouse = Entity(model=Quad(scale=(3,1), thickness=3, segments=3, mode='line'), scale=(0.2, 0.3), parent=camera, position=(0, -0.5))
-mouse_D = Entity(model=Quad(scale=(3,1), thickness=3, segments=3, mode='line'), scale=(0.2, 0.3), parent=camera, position=(0, -0.5))
 
-camera.z -= 5
+blend = Entity(texture='white_cube', model='untitled', x=0, y=0, z=0, color=color.orange, shader=lit_with_shadows_shader)
 
-
-floor_for_player = Voxel(position=(0, 0, 0), scale=(1, 1, 1))
+floor_for_player = Voxel(position=(0, 0, 0), scale=(2, 1, 2))
 floor_for_player.y = 10
-# floor_for_player.visible = False
-lazer = Entity(model='cube', parent=camera, color=color.yellow, scale=(0.5, 0.5, 200), position=(0, -0.5, 0), enabled=False)
+floor_for_player.visible = False
+lazer = Entity(model='cube', parent=camera, color=color.orange, scale=(0.5, 0.5, 200), position=(0, -0.5, 0), enabled=False, shader=lit_with_shadows_shader)
 gun = Entity(visible=False, on_cooldown=False, y=100)
 
 def shoot():
+    global lazer_fly
     if not gun.on_cooldown:
         gun.on_cooldown = True
         lazer.enabled = True
@@ -60,7 +58,8 @@ def input(key):
 def update():
     floor_for_player.x = player.x
     floor_for_player.z = player.z
-    pass
+    if player.y < -40: sys.exit()
+
 sky = Sky()
 
 app.run()
