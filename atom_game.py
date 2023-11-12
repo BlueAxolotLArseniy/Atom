@@ -30,13 +30,17 @@ player.y = 40
 player.x = 50
 player.jump_height = 6
 
-blend = Entity(texture='white_cube', model='untitled', x=0, y=0, z=0, color=color.orange, shader=lit_with_shadows_shader)
+blend = Entity(texture='Безымянный.png', model='untitled', x=0, y=0, z=0, shader=lit_with_shadows_shader)
 
-floor_for_player = Voxel(position=(0, 0, 0), scale=(2, 1, 2))
-floor_for_player.y = 10
-floor_for_player.visible = False
+floor_for_player = Voxel(position=(0, 0, 0), scale=(3, 1, 3))
+floor_for_player.y = -10
+
+# floor_for_player.visible = False
 lazer = Entity(model='cube', parent=camera, color=color.orange, scale=(0.5, 0.5, 200), position=(0, -0.5, 0), enabled=False, shader=lit_with_shadows_shader)
 gun = Entity(visible=False, on_cooldown=False, y=100)
+
+pivot = Entity()
+DirectionalLight(parent=pivot, y=2, z=3, shadows=True)
 
 def shoot():
     global lazer_fly
